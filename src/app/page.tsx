@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { GameWorld3D } from "@/components/GameWorld3D";
 import { ConfettiBurst } from "@/components/Confetti";
-import type { ReservationInput } from "@/lib/firebase";
+import type { ReservationInput } from "@/lib/supabase";
 import { emitSoundEvent } from "@/lib/sound-events";
 import { TICKET_PRICE, type Ticket, type TicketStatus } from "@/lib/tickets";
 import { useTickets } from "@/hooks/useTickets";
@@ -97,6 +97,7 @@ export default function Home() {
             height={290}
             sizes="(max-width: 700px) 38vw, (max-width: 1040px) 30vw, 290px"
             className="lobby-logo"
+            style={{ width: "clamp(160px, 28vw, 290px)", height: "auto" }}
             priority
           />
           <p className="chapter-label">presents</p>
@@ -349,14 +350,25 @@ function TicketReveal({
 
     setError("");
     setBusy(true);
-    const purchased = await onPurchase(
-      {
-        ...customer,
-        paymentSlipName: slip.name,
-        paymentSlipDataUrl: slip.dataUrl,
-      },
-      desiredTicketId,
-    );
+    let purchased: Ticket | null = null;
+    try {
+      purchased = await onPurchase(
+        {
+          ...customer,
+          paymentSlipName: slip.name,
+          paymentSlipDataUrl: slip.dataUrl,
+        },
+        desiredTicketId,
+      );
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Could not upload the payment slip. Please try again.",
+      );
+      setBusy(false);
+      return;
+    }
     setBusy(false);
     if (!purchased) {
       const message = `${desiredTicketId} is already reserved or sold. Choose another available ticket.`;
@@ -608,9 +620,7 @@ function TicketReveal({
 
 function TicketFoil({ ticket }: { ticket: Ticket }) {
   const ticketMessage =
-    ticket.paymentStatus === "rejected"
-      ? "Payment slip rejected. Please submit a new reservation."
-      : ticket.status === "reserved"
+    ticket.status === "reserved"
         ? "Reserved until admin verifies your payment slip."
         : "Rotaract Club of University of Ruhuna";
 
@@ -623,19 +633,13 @@ function TicketFoil({ ticket }: { ticket: Ticket }) {
       <p>{ticketMessage}</p>
       <div className="ticket-metal-row">
         <em>
-          {ticket.paymentStatus === "rejected"
-            ? "Rejected"
-            : ticket.status === "reserved"
-              ? "Pending"
-              : `Rs. ${TICKET_PRICE}`}
+          {ticket.status === "reserved" ? "Pending" : `Rs. ${TICKET_PRICE}`}
         </em>
         <div className="ticket-proof">
           <span>
             {ticket.paymentStatus === "verified"
               ? "Verified Entry"
-              : ticket.paymentStatus === "rejected"
-                ? "Needs New Slip"
-                : "Awaiting Admin"}
+              : "Awaiting Admin"}
           </span>
           <small>{ticket.ownerName || "Lucky Pass holder"}</small>
           <small>{ticket.phone || "Phone pending"}</small>
@@ -657,16 +661,11 @@ function TicketBoard({
   onSelectTicket: (ticketId: string) => void;
 }) {
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<TicketStatus | "rejected" | "all">(
-    "all",
-  );
+  const [filter, setFilter] = useState<TicketStatus | "all">("all");
   const visible = useMemo(
     () =>
       tickets.filter((ticket) => {
-        const statusMatch =
-          filter === "all" ||
-          ticket.status === filter ||
-          (filter === "rejected" && ticket.paymentStatus === "rejected");
+        const statusMatch = filter === "all" || ticket.status === filter;
         return (
           statusMatch && ticket.id.toLowerCase().includes(query.toLowerCase())
         );
@@ -694,9 +693,7 @@ function TicketBoard({
             />
           </label>
           <div>
-            {(
-              ["all", "available", "reserved", "sold", "rejected"] as const
-            ).map((status) => (
+            {(["all", "available", "reserved", "sold"] as const).map((status) => (
               <button
                 key={status}
                 className={filter === status ? "selected" : ""}
@@ -724,7 +721,7 @@ function TicketBoard({
                   disabled={item.status !== "available"}
                   aria-pressed={selectedTicketId === item.id}
                   aria-label={`${item.id} is ${item.status}. ${item.status === "available" ? "Select this ticket" : "Not selectable"}`}
-                  className={`vault-ticket ${item.status} ${item.paymentStatus === "rejected" ? "rejected" : ""} ${selectedTicketId === item.id ? "is-selected" : ""}`}
+                  className={`vault-ticket ${item.status} ${selectedTicketId === item.id ? "is-selected" : ""}`}
                   whileHover={
                     item.status === "available"
                       ? { y: -6, rotate: -2 }

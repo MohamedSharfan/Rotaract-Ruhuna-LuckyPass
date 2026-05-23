@@ -6,7 +6,7 @@ import {
   reserveSpecificTicket,
   watchTickets,
   type ReservationInput,
-} from "@/lib/firebase";
+} from "@/lib/supabase";
 import { TICKET_COUNT, type Ticket } from "@/lib/tickets";
 
 export function useTickets() {

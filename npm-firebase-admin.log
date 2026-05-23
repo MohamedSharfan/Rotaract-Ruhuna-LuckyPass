@@ -1,0 +1,30 @@
+npm ERR! code EACCES
+npm ERR! errno EACCES
+npm ERR! FetchError: request to https://registry.npmjs.org/firebase-admin failed, reason: 
+npm ERR!     at ClientRequest.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\minipass-fetch\lib\index.js:130:14)
+npm ERR!     at ClientRequest.emit (node:events:514:28)
+npm ERR!     at _destroy (node:_http_client:875:13)
+npm ERR!     at onSocketNT (node:_http_client:895:5)
+npm ERR!     at process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+npm ERR!  FetchError: request to https://registry.npmjs.org/firebase-admin failed, reason: 
+npm ERR!     at ClientRequest.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\minipass-fetch\lib\index.js:130:14)
+npm ERR!     at ClientRequest.emit (node:events:514:28)
+npm ERR!     at _destroy (node:_http_client:875:13)
+npm ERR!     at onSocketNT (node:_http_client:895:5)
+npm ERR!     at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+npm ERR!   code: 'EACCES',
+npm ERR!   errno: 'EACCES',
+npm ERR!   type: 'system',
+npm ERR!   requiredBy: '.'
+npm ERR! }
+npm ERR! 
+npm ERR! The operation was rejected by your operating system.
+npm ERR! It's possible that the file was already in use (by a text editor or antivirus),
+npm ERR! or that you lack permissions to access it.
+npm ERR! 
+npm ERR! If you believe this might be a permissions issue, please double-check the
+npm ERR! permissions of the file and its containing directories, or try running
+npm ERR! the command again as root/Administrator.
+
+npm ERR! Log files were not written due to an error writing to the directory: C:\Users\SHARFAN\AppData\Local\npm-cache\_logs
+npm ERR! You can rerun the command with `--loglevel=verbose` to see the logs in your terminal

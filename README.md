@@ -6,7 +6,7 @@
 Built for the  
 ## Rotaract Club of University of Ruhuna
 
-A luxury black & gold themed interactive raffle platform powered by Next.js, Firebase, and immersive 3D experiences.
+A luxury black & gold themed interactive raffle platform powered by Next.js, Supabase, and immersive 3D experiences.
 
 <br>
 
@@ -16,7 +16,7 @@ A luxury black & gold themed interactive raffle platform powered by Next.js, Fir
 
 ![Next JS](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Firebase](https://img.shields.io/badge/Firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black)
+![Supabase](https://img.shields.io/badge/Supabase-3ecf8e?style=for-the-badge&logo=supabase&logoColor=white)
 ![ThreeJS](https://img.shields.io/badge/Three.js-111111?style=for-the-badge&logo=three.js&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
@@ -37,7 +37,7 @@ The project transforms a traditional raffle ticket system into an immersive digi
 - 🎰 Interactive 3D raffle machine
 - 🪙 Animated coin & ticket effects
 - 🎟️ Live LP001 → LP600 ticket board
-- 🔥 Real-time Firebase ticket reservations
+- 🔥 Live Supabase ticket reservations
 - 💳 Manual payment verification system
 - 👨‍💼 Secure admin operator dashboard
 - 📱 Fully responsive premium UI
@@ -74,11 +74,7 @@ Visitors can:
 
 All reservations are protected using:
 
-```js
-Firestore runTransaction()
-```
-
-to prevent duplicate reservations and race conditions.
+The reservation flow uses guarded server-side updates in Supabase so one ticket cannot be sold to multiple buyers at the same time.
 
 ---
 
@@ -135,13 +131,13 @@ reserved → sold
 - Real-time ticket updates
 - Available / Reserved / Sold states
 - Atomic reservation logic
-- Conflict-safe Firestore transactions
+- Conflict-safe Supabase updates
 
 ---
 
 ## 👨‍💼 Admin Dashboard
 
-- Firebase Authentication
+- Supabase Auth
 - Reservation management
 - Payment verification
 - Ticket recovery tools
@@ -178,8 +174,9 @@ Optimized for:
 | Framer Motion | Animations |
 | Three.js | 3D rendering |
 | React Three Fiber | Three.js React integration |
-| Firebase Firestore | Database |
-| Firebase Authentication | Admin authentication |
+| Supabase Postgres | Database |
+| Supabase Auth | Admin authentication |
+| Supabase Storage | Payment slip storage |
 | Vercel | Deployment |
 
 ---
@@ -192,7 +189,6 @@ Optimized for:
 /public
 /styles
 /lib
-/firebase
 /api
 /admin
 ```
@@ -220,12 +216,11 @@ Create:
 Add:
 
 ```env
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_STORAGE_BUCKET=payment-slips
+ADMIN_EMAILS=
 
 GMAIL_USER=
 GMAIL_APP_PASSWORD=
@@ -233,41 +228,44 @@ GMAIL_APP_PASSWORD=
 
 ---
 
-# 🔥 Firebase Setup
+# 🟢 Supabase Setup
 
-## Create Firebase Project
+## Create Supabase Project
 
-1. Open Firebase Console
+1. Open Supabase
 2. Create a new project
 3. Enable:
-   - Firestore Database
+   - Database
+   - Storage
    - Authentication
-4. Enable:
+4. In Authentication:
 
 ```txt
-Authentication → Sign-in Method → Email/Password
+Authentication -> Providers -> Email
 ```
 
-5. Add an admin account manually
+5. Create the `tickets` table by running:
+
+[supabase/schema.sql](E:\raffle draw rotaract\supabase\schema.sql)
+
+6. Create one or more admin users in Supabase Auth.
+7. Add those email addresses to:
+
+```env
+ADMIN_EMAILS=admin@example.com,second-admin@example.com
+```
 
 ---
 
-## Suggested Firestore Rules
+## Storage Bucket
 
-```js
-rules_version = '2';
+Payment slip images are stored in Supabase Storage under:
 
-service cloud.firestore {
-  match /databases/{database}/documents {
-
-    match /tickets/{ticketId} {
-      allow read: if true;
-      allow create, update, delete: if request.auth != null;
-    }
-
-  }
-}
+```txt
+payment-slips/{ticketId}/{fileName}
 ```
+
+The app creates the bucket automatically with the name from `SUPABASE_STORAGE_BUCKET` if the service role key has permission. Ticket status and buyer metadata live in the `tickets` table, while the slip file itself lives in Supabase Storage.
 
 ---
 
@@ -371,7 +369,7 @@ jackpot
 
 # ⚠️ Troubleshooting
 
-## Firebase Login Error
+## Supabase Login Error
 
 ### Problem
 
@@ -383,7 +381,7 @@ auth/invalid-credential
 
 - Email/Password auth enabled
 - Admin account exists
-- Correct Firebase project
+- Correct Supabase project
 - Correct `.env.local`
 
 ---
@@ -422,7 +420,7 @@ Modify:
 LP001 → LP600
 ```
 
-inside seed logic or Firestore initialization.
+inside `src/lib/tickets.ts`. The app keeps LP001 to LP600 in sync with the Supabase `tickets` table and creates any missing records automatically.
 
 ---
 

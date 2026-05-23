@@ -1189,12 +1189,6 @@ button {
   color: #1b1204;
 }
 
-.vault-ticket.rejected {
-  border-color: #8d2a22;
-  background: linear-gradient(#421410, #190b09);
-  color: #ffb0a8;
-}
-
 .vault-ticket.loading {
   animation: chunky-pulse 1.1s infinite;
 }
@@ -1539,7 +1533,7 @@ button {
 
 .buyer-row {
   display: grid;
-  grid-template-columns: 24px 86px minmax(140px, 1fr) minmax(110px, 0.8fr) minmax(150px, 1fr);
+  grid-template-columns: 24px 86px minmax(140px, 1fr) minmax(110px, 0.8fr) minmax(150px, 1fr) auto auto;
   gap: 10px;
   align-items: center;
   padding: 14px;
@@ -1549,7 +1543,6 @@ button {
 .buyer-row strong,
 .buyer-row a {
   min-width: 0;
-  grid-template-columns: 28px 86px 1fr auto auto;
 }
 
 .buyer-row strong {
@@ -1560,6 +1553,27 @@ button {
   color: var(--silver);
   overflow-wrap: anywhere;
   text-decoration: none;
+}
+
+.buyer-slip-link {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #7c5612;
+  border-bottom-width: 7px;
+  border-radius: 14px;
+  background: #d4af37;
+  color: #1b1204;
+  font-weight: 950;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+
+.buyer-slip-link.missing {
+  border-color: #403829;
+  background: #1a1815;
+  color: #8f8978;
 }
 
 .confetti-layer {

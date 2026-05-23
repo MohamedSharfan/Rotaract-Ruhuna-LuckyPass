@@ -10,6 +10,8 @@ export type Ticket = {
   phone?: string;
   email?: string;
   paymentSlipName?: string;
+  paymentSlipUrl?: string;
+  paymentSlipPath?: string;
   paymentSlipDataUrl?: string;
   reservedAt?: string;
   verifiedAt?: string;
@@ -26,17 +28,17 @@ export function formatTicketId(number: number) {
 export function createTickets(seedSold = 0): Ticket[] {
   return Array.from({ length: TICKET_COUNT }, (_, index) => {
     const number = index + 1;
-    const everySold = number <= seedSold || number % 29 === 0;
+    const isSeedSold = number <= seedSold;
 
     return {
       id: formatTicketId(number),
       number,
-      status: everySold ? "sold" : "available",
-      paymentStatus: everySold ? "verified" : "none",
-      ownerName: everySold
+      status: isSeedSold ? "sold" : "available",
+      paymentStatus: isSeedSold ? "verified" : "none",
+      ownerName: isSeedSold
         ? sampleNames[number % sampleNames.length]
         : undefined,
-      purchasedAt: everySold
+      purchasedAt: isSeedSold
         ? new Date(Date.now() - number * 1800000).toISOString()
         : undefined,
     };

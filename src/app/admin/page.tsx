@@ -2,12 +2,11 @@
 
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
-import type { User } from "firebase/auth";
+import type { User } from "@supabase/supabase-js";
 import {
   Banknote,
   CheckCircle2,
   LogOut,
-  RotateCcw,
   ShieldCheck,
   TicketCheck,
   XCircle,
@@ -18,18 +17,18 @@ import {
   releaseSoldTicket,
   rejectReservedTicket,
   releaseIncompleteReservations,
-  seedTickets,
   verifyReservedTicket,
   watchAdmin,
-} from "@/lib/firebase";
+} from "@/lib/supabase";
+import { useAdminTickets } from "@/hooks/useAdminTickets";
 import { TICKET_PRICE, type Ticket } from "@/lib/tickets";
-import { useTickets } from "@/hooks/useTickets";
 
 export default function AdminPage() {
-  const { tickets, stats, loading } = useTickets();
   const [user, setUser] = useState<User | null>(null);
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [authError, setAuthError] = useState("");
+  const [authBusy, setAuthBusy] = useState(false);
+  const { tickets, stats, loading, error } = useAdminTickets(Boolean(user));
 
   useEffect(() => watchAdmin(setUser), []);
 
@@ -39,7 +38,7 @@ export default function AdminPage() {
         (ticket) =>
           ticket.status === "reserved" &&
           ticket.paymentStatus === "pending" &&
-          Boolean(ticket.paymentSlipDataUrl),
+          Boolean(ticket.paymentSlipUrl || ticket.paymentSlipDataUrl),
       ),
     [tickets],
   );
@@ -48,7 +47,8 @@ export default function AdminPage() {
       tickets.filter(
         (ticket) =>
           ticket.status === "reserved" &&
-          (!ticket.paymentSlipDataUrl || !ticket.ownerName),
+          (!(ticket.paymentSlipUrl || ticket.paymentSlipDataUrl) ||
+            !ticket.ownerName),
       ),
     [tickets],
   );
@@ -60,23 +60,29 @@ export default function AdminPage() {
   async function login(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setAuthError("");
+    setAuthBusy(true);
     try {
       await adminSignIn(credentials.email, credentials.password);
     } catch (error) {
       if (
         error instanceof Error &&
-        error.message.includes("auth/invalid-credential")
+        (error.message.includes("auth/invalid-credential") ||
+          error.message.toLowerCase().includes("invalid login credentials"))
       ) {
         setAuthError(
-          "Invalid admin email or password. Check that Email/Password sign-in is enabled in Firebase Auth and that this admin account exists there.",
+          "Invalid admin email or password. Check that Email sign-in is enabled in Supabase Auth and that this admin account exists there.",
         );
+        setAuthBusy(false);
         return;
       }
 
       setAuthError(
         error instanceof Error ? error.message : "Admin sign in failed.",
       );
+      setAuthBusy(false);
+      return;
     }
+    setAuthBusy(false);
   }
 
   return (
@@ -128,8 +134,8 @@ export default function AdminPage() {
                 setCredentials({ ...credentials, password: event.target.value })
               }
             />
-            <button className="metal-switch" type="submit">
-              Enter Control Room
+            <button className="metal-switch" type="submit" disabled={authBusy}>
+              {authBusy ? "Signing In..." : "Enter Control Room"}
             </button>
             {authError && <p className="form-error">{authError}</p>}
           </form>
@@ -137,17 +143,13 @@ export default function AdminPage() {
       ) : (
         <section className="admin-workbench">
           <div className="admin-actions">
-            <button className="metal-switch" onClick={() => seedTickets()}>
-              <RotateCcw size={18} />
-              Seed Tickets
-            </button>
             {incompleteReserved.length > 0 && (
               <button
                 className="metal-switch"
                 onClick={() => releaseIncompleteReservations(tickets)}
               >
                 <XCircle size={18} />
-                Clear Demo Reservations
+                Clear Incomplete Reservations
               </button>
             )}
             <button className="metal-switch" onClick={() => adminSignOut()}>
@@ -155,6 +157,7 @@ export default function AdminPage() {
               Sign Out
             </button>
           </div>
+          {(authError || error) && <p className="form-error">{authError || error}</p>}
 
           <div className="admin-columns">
             <div>
@@ -172,7 +175,7 @@ export default function AdminPage() {
               </div>
               {incompleteReserved.length > 0 && (
                 <div className="cleanup-note">
-                  {incompleteReserved.length} old/demo reserved ticket records
+                  {incompleteReserved.length} incomplete reserved ticket records
                   have no buyer slip and are hidden from verification.
                 </div>
               )}
@@ -244,15 +247,15 @@ function ReservationCard({ ticket }: { ticket: Ticket }) {
           <dd>Rs. {TICKET_PRICE}</dd>
         </div>
       </dl>
-      {ticket.paymentSlipDataUrl ? (
+      {ticket.paymentSlipUrl || ticket.paymentSlipDataUrl ? (
         <a
           className="slip-preview"
-          href={ticket.paymentSlipDataUrl}
+          href={ticket.paymentSlipUrl || ticket.paymentSlipDataUrl}
           target="_blank"
           rel="noreferrer"
         >
           <img
-            src={ticket.paymentSlipDataUrl}
+            src={ticket.paymentSlipUrl || ticket.paymentSlipDataUrl}
             alt={`Payment slip for ${ticket.id}`}
           />
           <span>
@@ -293,6 +296,18 @@ function BuyerRow({ ticket }: { ticket: Ticket }) {
       <span>{ticket.ownerName || "Buyer"}</span>
       <a href={`tel:${ticket.phone}`}>{ticket.phone || "No phone"}</a>
       <a href={`mailto:${ticket.email}`}>{ticket.email || "No email"}</a>
+      {ticket.paymentSlipUrl ? (
+        <a
+          className="buyer-slip-link"
+          href={ticket.paymentSlipUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Receipt
+        </a>
+      ) : (
+        <span className="buyer-slip-link missing">No receipt</span>
+      )}
       <button
         className="release-button"
         disabled={busy}
