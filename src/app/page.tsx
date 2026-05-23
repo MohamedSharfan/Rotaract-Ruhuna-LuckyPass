@@ -388,8 +388,9 @@ function TicketReveal({
       setError("Please upload an image slip.");
       return;
     }
-    if (file.size > 750_000) {
-      setError("Please upload a compressed slip image below 750 KB.");
+    const MAX_SLIP_BYTES = 2 * 1024 * 1024; 
+    if (file.size > MAX_SLIP_BYTES) {
+      setError("Please upload a slip image smaller than 2 MB.");
       return;
     }
 
@@ -529,15 +530,15 @@ function TicketReveal({
                   <dl>
                     <div>
                       <dt>Account Name</dt>
-                      <dd>Rotaract Club of University of Ruhuna</dd>
+                      <dd>A.M. Mary Oshini</dd>
                     </div>
                     <div>
                       <dt>Bank</dt>
-                      <dd>Bank of Ceylon</dd>
+                      <dd>People's Bank - Kalutara</dd>
                     </div>
                     <div>
                       <dt>Account No.</dt>
-                      <dd>000000000000</dd>
+                      <dd>039200130027668</dd>
                     </div>
                     <div>
                       <dt>Amount</dt>
