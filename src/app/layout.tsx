@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Sora, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import rotaractLogo from "@/resources/raclogo.png";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -18,6 +19,9 @@ export const metadata: Metadata = {
   title: "Lucky Pass | Rotaract Club of University of Ruhuna",
   description:
     "A cinematic raffle draw experience with 600 Lucky Pass tickets.",
+  icons: {
+    icon: rotaractLogo.src,
+  },
 };
 
 export default function RootLayout({
