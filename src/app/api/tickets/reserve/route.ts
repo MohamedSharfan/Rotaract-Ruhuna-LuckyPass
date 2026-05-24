@@ -6,7 +6,7 @@ import {
   getSupabaseAdmin,
   toTicket,
 } from "@/lib/supabase-admin";
-import { type Ticket } from "@/lib/tickets";
+import { formatTicketId, TICKET_COUNT, type Ticket } from "@/lib/tickets";
 
 const MAX_SLIP_BYTES = 2 * 1024 * 1024;
 
@@ -54,7 +54,15 @@ export async function POST(request: Request) {
     await ensureStorageBucket();
 
     const supabase = getSupabaseAdmin();
-    const normalizedTicketId = ticketId?.trim().toUpperCase();
+    const normalizedTicketId = parseTicketId(ticketId);
+
+    if (ticketId && !normalizedTicketId) {
+      return NextResponse.json(
+        { error: "Choose an LP number from LP1 to LP600." },
+        { status: 400 },
+      );
+    }
+
     const targetTicketId = normalizedTicketId || (await pickAvailableTicketId());
 
     if (!targetTicketId) {
@@ -151,6 +159,20 @@ async function pickAvailableTicketId() {
   }
 
   return data?.id ?? null;
+}
+
+function parseTicketId(ticketId?: string) {
+  if (!ticketId) return null;
+
+  const digits = ticketId.trim().toUpperCase().replace(/[^0-9]/g, "");
+  if (!digits) return null;
+
+  const number = Number(digits);
+  if (!Number.isInteger(number) || number < 1 || number > TICKET_COUNT) {
+    return null;
+  }
+
+  return formatTicketId(number);
 }
 
 function parseDataUrl(dataUrl: string) {

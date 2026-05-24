@@ -22,6 +22,8 @@
 html {
   scroll-behavior: smooth;
   background: var(--black);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -30,6 +32,7 @@ body {
   overflow-x: hidden;
   color: var(--cream);
   font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-size: clamp(15px, 0.75vw + 13px, 18px);
   background:
     radial-gradient(circle at 50% -12%, rgba(212, 175, 55, 0.24), transparent 31rem),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
@@ -666,6 +669,7 @@ button {
   box-shadow: 0 30px 0 #050404, 0 46px 80px rgba(0, 0, 0, 0.66), inset 0 2px 0 rgba(255, 255, 255, 0.08);
   padding: clamp(16px, 3vw, 26px);
   transform-style: preserve-3d;
+  overflow-wrap: anywhere;
 }
 
 .popup-backdrop {
@@ -691,6 +695,7 @@ button {
   box-shadow: 0 24px 0 #050404, 0 46px 70px rgba(0, 0, 0, 0.68), inset 0 2px 0 rgba(255, 255, 255, 0.08);
   padding: 22px;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .popup-card strong {
@@ -1010,6 +1015,7 @@ button {
   max-width: 230px;
   font-weight: 800;
   line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .ticket-metal-row {
@@ -1621,6 +1627,7 @@ button {
         #fff8dc 100%
     );
 
+      background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 
@@ -1844,6 +1851,259 @@ button {
 
   .ticket-proof {
     text-align: left;
+  }
+}
+
+@media (max-width: 560px) {
+  .game-lobby {
+    padding: 36px 12px 84px;
+    gap: 24px;
+  }
+
+  .lobby-copy h1 {
+    font-size: clamp(3rem, 19vw, 4.6rem);
+  }
+
+  .lobby-line {
+    margin: 22px 0;
+    font-size: clamp(0.96rem, 4.2vw, 1.08rem);
+  }
+
+  .chapter-label,
+  .section-title span {
+    margin: 18px 0 10px;
+    font-size: 0.72rem;
+  }
+
+  .section-title {
+    margin-bottom: 24px;
+  }
+
+  .section-title h2 {
+    font-size: clamp(1.8rem, 8.8vw, 3rem);
+  }
+
+  .game-section {
+    padding: 56px 12px;
+  }
+
+  .arcade-button,
+  .coin-button,
+  .metal-switch {
+    min-height: 52px;
+  }
+
+  .button-face {
+    min-height: 52px;
+    padding: 0 16px;
+    border-radius: 18px;
+    font-size: 0.9rem;
+  }
+
+  .slot-mouth {
+    min-height: 68px;
+    padding: 10px 12px;
+    font-size: 0.92rem;
+  }
+
+  .coin-slot input,
+  .board-toolbar input {
+    min-height: 50px;
+  }
+
+  .ticket-choice-panel {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .ticket-choice-panel label {
+    font-size: 0.72rem;
+  }
+
+  .ticket-choice-panel p,
+  .payment-reference span,
+  .payment-warning span,
+  .board-selection-banner small {
+    font-size: 0.92rem;
+  }
+
+  .popup-backdrop,
+  .payment-modal-backdrop {
+    place-items: start center;
+    padding: 54px 12px 12px;
+  }
+
+  .popup-card {
+    width: min(420px, 100%);
+    padding: 16px;
+    gap: 10px;
+    border-radius: 22px;
+  }
+
+  .popup-card strong {
+    font-size: 0.98rem;
+  }
+
+  .popup-card p {
+    font-size: 0.94rem;
+  }
+
+  .payment-modal {
+    width: min(620px, 100%);
+    padding: 14px;
+    border-radius: 24px;
+  }
+
+  .payment-modal::before {
+    inset: 8px;
+    border-width: 4px;
+    border-radius: 18px;
+  }
+
+  .modal-close {
+    top: 10px;
+    right: 10px;
+    padding: 7px 10px;
+    font-size: 0.82rem;
+  }
+
+  .modal-slot {
+    margin-bottom: 12px;
+    padding-right: 72px;
+  }
+
+  .payment-box {
+    gap: 12px;
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .payment-box dl div,
+  .buyer-details div {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-reference,
+  .payment-warning {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .board-toolbar {
+    gap: 12px;
+  }
+
+  .board-toolbar button {
+    padding: 9px 11px;
+    font-size: 0.8rem;
+  }
+
+  .board-selection-banner {
+    padding: 12px 14px;
+    border-radius: 18px;
+  }
+
+  .ticket-vault-grid {
+    grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+    gap: 8px;
+    max-height: 520px;
+  }
+
+  .vault-ticket {
+    min-height: 46px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+  }
+
+  .capsule-chamber {
+    min-height: 420px;
+  }
+
+  .ticket-foil {
+    width: min(320px, 84vw);
+    min-height: 430px;
+    padding: 20px;
+    border-radius: 26px;
+  }
+
+  .ticket-foil strong {
+    margin: 36px 0 14px;
+    font-size: clamp(3.4rem, 20vw, 5rem);
+  }
+
+  .ticket-metal-row {
+    margin-top: 34px;
+    gap: 10px;
+  }
+
+  .ticket-proof {
+    min-width: 0;
+    padding: 8px 10px;
+  }
+
+  .lobby-stage {
+    min-height: 360px;
+  }
+
+  .treasure-tile {
+    min-height: 240px;
+    padding: 22px;
+  }
+
+  .treasure-tile span {
+    width: 82px;
+    height: 82px;
+    font-size: 1.45rem;
+  }
+
+  .stat-puck {
+    min-height: 92px;
+    padding: 14px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .game-lobby {
+    padding-top: 28px;
+    padding-bottom: 72px;
+  }
+
+  .game-world {
+    border-width: 4px;
+    border-bottom-width: 10px;
+    border-radius: 22px;
+  }
+
+  .mascot {
+    width: 84px;
+    height: 102px;
+  }
+
+  .lobby-copy h1 {
+    font-size: clamp(2.6rem, 18vw, 4rem);
+  }
+
+  .board-toolbar input,
+  .coin-slot input {
+    padding: 0 14px;
+  }
+
+  .payment-modal-backdrop,
+  .popup-backdrop {
+    padding-top: 44px;
+  }
+
+  .payment-box dl div {
+    padding: 9px;
+  }
+
+  .ticket-choice-panel p,
+  .board-selection-banner small,
+  .payment-reference span,
+  .payment-warning span {
+    font-size: 0.88rem;
   }
 }
 

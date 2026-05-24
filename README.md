@@ -342,9 +342,6 @@ Default Next.js settings work perfectly.
 
 ---
 
-# 🔊 Sound Event Hooks
-
-The app emits browser sound events for future sound design systems.
 
 ```js
 window.addEventListener("lucky-pass:sound", (event) => {

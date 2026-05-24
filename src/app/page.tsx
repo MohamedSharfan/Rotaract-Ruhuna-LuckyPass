@@ -22,14 +22,32 @@ import { GameWorld3D } from "@/components/GameWorld3D";
 import { ConfettiBurst } from "@/components/Confetti";
 import type { ReservationInput } from "@/lib/supabase";
 import { emitSoundEvent } from "@/lib/sound-events";
-import { TICKET_PRICE, type Ticket, type TicketStatus } from "@/lib/tickets";
+import {
+  formatTicketId,
+  TICKET_COUNT,
+  TICKET_PRICE,
+  type Ticket,
+  type TicketStatus,
+} from "@/lib/tickets";
 import { useTickets } from "@/hooks/useTickets";
 import rotaractLogo from "@/resources/RACRUH Logo Cranberry-1.png";
 
 type MachineMode = "lobby" | "reveal";
 
 function normalizeTicketId(value: string) {
-  return value.toUpperCase().replace(/\s+/g, "").slice(0, 5);
+  const digits = value.toUpperCase().replace(/[^0-9]/g, "");
+  if (!digits) return "";
+
+  const number = Number(digits);
+  if (!Number.isInteger(number) || number < 1 || number > TICKET_COUNT) {
+    return "";
+  }
+
+  return formatTicketId(number);
+}
+
+function sanitizeTicketInput(value: string) {
+  return value.toUpperCase().replace(/\s+/g, "").slice(0, 6);
 }
 
 export default function Home() {
@@ -69,6 +87,11 @@ export default function Home() {
     const requestedTicketId = normalizeTicketId(
       desiredTicketId || selectedTicketId,
     );
+    if (!requestedTicketId) {
+      throw new Error(
+        "Choose an LP number from LP1 to LP600, or tap one on the board.",
+      );
+    }
     const purchased = await reserve(customer, requestedTicketId);
     if (!purchased) return null;
     setTicket(purchased);
@@ -144,7 +167,7 @@ export default function Home() {
             [
               "Gold",
               "Legendary Reveal",
-              "Insert a coin, wake the gears, and watch your number flip.",
+              "Insert a ticket, wake the gears, and watch your number flip.",
             ],
             [
               "Live",
@@ -279,7 +302,7 @@ function LuckyMascot({ mood }: { mood: "idle" | "excited" | "celebrate" }) {
         duration: mood === "celebrate" ? 0.72 : 2.6,
         ease: "easeInOut",
       }}
-      aria-label="Lucky coin mascot"
+      aria-label="Lucky ticket mascot"
     >
       <div className="mascot-crown" />
       <div className="mascot-face">
@@ -343,8 +366,8 @@ function TicketReveal({
     }
 
     const desiredTicketId = normalizeTicketId(selectedTicketId);
-    if (!/^LP\d{3}$/.test(desiredTicketId)) {
-      setError("Choose a valid LP number like LP322.");
+    if (!desiredTicketId) {
+      setError("Choose an LP number from LP1 to LP600, or tap one on the board.");
       return;
     }
 
@@ -403,7 +426,7 @@ function TicketReveal({
       <SectionTitle
         icon={<Sparkles size={20} />}
         kicker="loot box"
-        title="Insert a coin. Test your luck. Claim your Lucky Pass."
+        title="Insert a ticket. Test your luck. Claim your Lucky Pass."
       />
       <div className="loot-layout">
         <form className="coin-slot" onSubmit={submit}>
@@ -418,17 +441,23 @@ function TicketReveal({
               className="ticket-choice-input"
               value={selectedTicketId}
               onChange={(event) =>
-                onSelectedTicketIdChange(normalizeTicketId(event.target.value))
+                onSelectedTicketIdChange(sanitizeTicketInput(event.target.value))
               }
-              placeholder="LP322"
-              maxLength={5}
+              placeholder="LP1 - LP600"
+              maxLength={6}
+              inputMode="text"
+              autoComplete="off"
+              autoCapitalize="characters"
+              spellCheck={false}
             />
             <p>
               {selectedTicket
                 ? selectedTicket.status === "available"
                   ? `${selectedTicket.id} is available. Reserve it now.`
                   : `${selectedTicket.id} is already ${selectedTicket.status}. Pick another number.`
-                : "Type a ticket number or tap one on the board below."}
+                : selectedTicketId
+                  ? "Enter an LP number from LP1 to LP600, or tap one on the board below."
+                  : "Type a ticket number or tap one on the board below."}
             </p>
           </div>
           <input
