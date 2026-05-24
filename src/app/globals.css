@@ -51,6 +51,7 @@ button {
 
 .arcade-page {
   position: relative;
+  z-index: 1;
   isolation: isolate;
 }
 
@@ -159,9 +160,10 @@ button {
   position: relative;
   display: flex;
   width: 100%;
-  z-index: 100;
+  z-index:0;
   justify-content: center;
-  padding: 30px 16px 38px;
+  margin-top: 48px;
+  padding: 54px 16px 54px;
   text-align: center;
 }
 
@@ -659,15 +661,17 @@ button {
 
 .payment-modal {
   position: relative;
-  width: min(720px, 100%);
+  width: min(540px, 92vw);
+  max-height: none;
+  overflow: hidden;
   border: 6px solid #2b261e;
   border-bottom-width: 16px;
-  border-radius: 34px;
+  border-radius: 26px;
   background:
     radial-gradient(circle at 28% 12%, rgba(255, 217, 120, 0.16), transparent 34%),
     linear-gradient(#1a1815, #0d0c0b);
   box-shadow: 0 30px 0 #050404, 0 46px 80px rgba(0, 0, 0, 0.66), inset 0 2px 0 rgba(255, 255, 255, 0.08);
-  padding: clamp(16px, 3vw, 26px);
+  padding: 14px;
   transform-style: preserve-3d;
   overflow-wrap: anywhere;
 }
@@ -684,16 +688,18 @@ button {
 
 .popup-card {
   display: grid;
-  gap: 14px;
-  width: min(460px, 100%);
+  gap: 10px;
+  width: min(360px, 92vw);
+  max-height: none;
+  overflow: hidden;
   border: 4px solid #7c2f25;
   border-bottom-width: 10px;
-  border-radius: 26px;
+  border-radius: 20px;
   background:
     radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.12), transparent 28%),
     linear-gradient(180deg, #24100f, #130908);
   box-shadow: 0 24px 0 #050404, 0 46px 70px rgba(0, 0, 0, 0.68), inset 0 2px 0 rgba(255, 255, 255, 0.08);
-  padding: 22px;
+  padding: 12px;
   text-align: center;
   overflow-wrap: anywhere;
 }
@@ -701,7 +707,7 @@ button {
 .popup-card strong {
   color: #ffb0a8;
   font-family: var(--font-sora), sans-serif;
-  font-size: 1.15rem;
+  font-size: 0.92rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -709,7 +715,8 @@ button {
 .popup-card p {
   margin: 0;
   color: var(--cream);
-  line-height: 1.5;
+  line-height: 1.35;
+  font-size: 0.86rem;
 }
 
 .popup-card .metal-switch {
@@ -719,17 +726,17 @@ button {
 .payment-modal::before {
   content: "";
   position: absolute;
-  inset: 12px;
+  inset: 8px;
   z-index: -1;
-  border: 5px dotted rgba(212, 175, 55, 0.62);
-  border-radius: 24px;
+  border: 4px dotted rgba(212, 175, 55, 0.62);
+  border-radius: 18px;
   animation: lamp-chase 0.9s steps(2) infinite;
 }
 
 .modal-close {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   z-index: 2;
   border: 3px solid #403829;
   border-bottom-width: 7px;
@@ -738,12 +745,12 @@ button {
   color: #1b1204;
   cursor: pointer;
   font-weight: 950;
-  padding: 8px 12px;
+  padding: 6px 10px;
 }
 
 .modal-slot {
-  margin-bottom: 16px;
-  padding-right: 86px;
+  margin-bottom: 10px;
+  padding-right: 64px;
 }
 
 .reserve-switch {
@@ -773,19 +780,19 @@ button {
 .payment-box dl div,
 .buyer-details div {
   display: grid;
-  grid-template-columns: 116px 1fr;
-  gap: 10px;
+  grid-template-columns: 100px 1fr;
+  gap: 8px;
   align-items: center;
   border: 2px solid #302a20;
-  border-radius: 14px;
+  border-radius: 12px;
   background: #0b0a09;
-  padding: 10px;
+  padding: 8px;
 }
 
 .payment-box dt,
 .buyer-details dt {
   color: #b8ae92;
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   font-weight: 900;
   text-transform: uppercase;
 }
@@ -801,10 +808,10 @@ button {
 .payment-warning {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   border: 3px solid #403829;
-  border-radius: 18px;
-  padding: 12px;
+  border-radius: 14px;
+  padding: 8px;
 }
 
 .payment-reference {
@@ -842,25 +849,25 @@ button {
 .payment-reference span {
   margin-top: 4px;
   font-family: var(--font-sora), sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.86rem;
   font-weight: 950;
 }
 
 .slip-upload {
   position: relative;
   display: flex;
-  min-height: 58px;
+  min-height: 48px;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   overflow: hidden;
   border: 3px dashed #7c5612;
-  border-radius: 18px;
+  border-radius: 14px;
   background: #19140a;
   color: var(--gold-bright);
   cursor: pointer;
   font-weight: 950;
-  padding: 0 14px;
+  padding: 0 12px;
 }
 
 .slip-upload input {
@@ -1795,9 +1802,10 @@ button {
   }
 
   .site-footer {
-    padding: 22px 12px 16px;
-    margin-bottom: 100px;
-    z-index: 99;
+    margin-top: 48px;
+    padding: 54px 12px 54px;
+    margin-bottom: 120px;
+    z-index: 0;
   }
 
   .site-footer a {
@@ -1930,52 +1938,59 @@ button {
   .popup-backdrop,
   .payment-modal-backdrop {
     place-items: start center;
-    padding: 84px 12px 12px;
+    padding: 72px 10px 18px;
   }
 
   .popup-card {
-    width: min(420px, 100%);
-    padding: 16px;
-    gap: 10px;
-    border-radius: 22px;
+    width: min(360px, 100%);
+    max-height: none;
+    overflow: hidden;
+    padding: 12px;
+    gap: 8px;
+    border-radius: 20px;
   }
 
   .popup-card strong {
-    font-size: 0.98rem;
+    font-size: 0.9rem;
   }
 
   .popup-card p {
-    font-size: 0.94rem;
+    font-size: 0.88rem;
+    line-height: 1.35;
   }
 
   .payment-modal {
-    width: min(620px, 100%);
-    padding: 14px;
-    border-radius: 24px;
+    width: min(360px, 100%);
+    max-height: none;
+    overflow: hidden;
+    padding: 12px;
+    border-radius: 20px;
+    transform: scale(0.96);
+    transform-origin: top center;
   }
 
   .payment-modal::before {
-    inset: 8px;
-    border-width: 4px;
-    border-radius: 18px;
+    inset: 6px;
+    border-width: 3px;
+    border-radius: 16px;
   }
 
   .modal-close {
-    top: 10px;
-    right: 10px;
-    padding: 7px 10px;
-    font-size: 0.82rem;
+    top: 8px;
+    right: 8px;
+    padding: 6px 8px;
+    font-size: 0.75rem;
   }
 
   .modal-slot {
-    margin-bottom: 12px;
-    padding-right: 72px;
+    margin-bottom: 10px;
+    padding-right: 64px;
   }
 
   .payment-box {
-    gap: 12px;
-    padding: 14px;
-    border-radius: 20px;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 18px;
   }
 
   .payment-box dl div,
@@ -1986,8 +2001,8 @@ button {
   .payment-reference,
   .payment-warning {
     align-items: flex-start;
-    gap: 10px;
-    padding: 10px;
+    gap: 8px;
+    padding: 8px;
   }
 
   .board-toolbar {
@@ -2093,6 +2108,7 @@ button {
   .payment-modal-backdrop,
   .popup-backdrop {
     padding-top: 84px;
+    padding-bottom: 28px;
   }
 
   .payment-box dl div {
@@ -2103,7 +2119,7 @@ button {
   .board-selection-banner small,
   .payment-reference span,
   .payment-warning span {
-    font-size: 0.88rem;
+    font-size: 0.82rem;
   }
 }
 
