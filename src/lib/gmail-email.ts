@@ -195,196 +195,196 @@ function buildHtmlMessage({
   name?: string | null;
   ticketId: string;
 }) {
-  const displayName = escapeHtml(name?.trim() || "Lucky Pass Holder");
+  const displayName = escapeHtml(name?.trim() || "Participant");
 
   return `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
 
-    <body style="
-      margin:0;
-      padding:0;
-      background:#f4f6f9;
-      font-family:Arial, Helvetica, sans-serif;
+<title>Lucky Pass Verified</title>
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  background:#f5f5f5;
+  font-family:Inter,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="center" style="padding:40px 16px;">
+
+  <!-- CONTAINER -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0"
+    style="
+      max-width:560px;
+      background:#ffffff;
+      border:1px solid #e5e5e5;
+      border-radius:20px;
+      overflow:hidden;
     ">
 
-      <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 12px;">
-        <tr>
-          <td align="center">
+    <!-- TOP BAR -->
+    <tr>
+      <td style="
+        height:6px;
+        background:#111111;
+      "></td>
+    </tr>
 
-            <table width="100%" cellpadding="0" cellspacing="0"
-              style="
-                max-width:620px;
-                background:#ffffff;
-                border-radius:18px;
-                overflow:hidden;
-                box-shadow:0 10px 35px rgba(0,0,0,0.08);
+    <!-- HEADER -->
+    <tr>
+      <td style="
+        padding:48px 40px 24px;
+      ">
+
+        <p style="
+          margin:0 0 14px;
+          font-size:13px;
+          font-weight:600;
+          letter-spacing:0.08em;
+          text-transform:uppercase;
+          color:#666666;
+        ">
+          Lucky Pass
+        </p>
+
+        <h1 style="
+          margin:0;
+          font-size:34px;
+          line-height:1.15;
+          letter-spacing:-0.03em;
+          color:#111111;
+          font-weight:700;
+        ">
+          Payment verified.
+        </h1>
+
+      </td>
+    </tr>
+
+    <!-- BODY -->
+    <tr>
+      <td style="
+        padding:0 40px 40px;
+      ">
+
+        <p style="
+          margin:0 0 20px;
+          color:#444444;
+          font-size:16px;
+          line-height:1.75;
+        ">
+          Hi ${displayName},
+        </p>
+
+        <p style="
+          margin:0 0 28px;
+          color:#444444;
+          font-size:16px;
+          line-height:1.75;
+        ">
+          Your payment has been successfully verified and your Lucky Pass entry
+          is now officially confirmed for the draw.
+        </p>
+
+        <!-- TICKET CARD -->
+        <table width="100%" cellpadding="0" cellspacing="0" border="0"
+          style="
+            border:1px solid #e8e8e8;
+            border-radius:16px;
+            background:#fafafa;
+            margin:0 0 32px;
+          ">
+
+          <tr>
+            <td style="
+              padding:28px;
+            ">
+
+              <p style="
+                margin:0 0 10px;
+                font-size:12px;
+                font-weight:600;
+                letter-spacing:0.08em;
+                text-transform:uppercase;
+                color:#777777;
               ">
+                Verified Ticket ID
+              </p>
 
-              <!-- HEADER -->
-              <tr>
-                <td style="
-                  background:linear-gradient(135deg,#111827,#1f2937);
-                  padding:42px 32px;
-                  text-align:center;
-                ">
-                  <h1 style="
-                    margin:0;
-                    color:#facc15;
-                    font-size:32px;
-                    font-weight:700;
-                    letter-spacing:0.5px;
-                  ">
-                    Lucky Pass Verified
-                  </h1>
+              <p style="
+                margin:0;
+                font-size:28px;
+                line-height:1.2;
+                font-weight:700;
+                letter-spacing:-0.03em;
+                color:#111111;
+              ">
+                ${escapeHtml(ticketId)}
+              </p>
 
-                  <p style="
-                    margin-top:12px;
-                    color:#d1d5db;
-                    font-size:15px;
-                    line-height:1.6;
-                  ">
-                    Your payment has been successfully confirmed
-                  </p>
-                </td>
-              </tr>
+            </td>
+          </tr>
 
-              <!-- CONTENT -->
-              <tr>
-                <td style="padding:40px 34px; color:#374151;">
+        </table>
 
-                  <p style="
-                    margin:0 0 18px;
-                    font-size:17px;
-                    line-height:1.7;
-                  ">
-                    Hi <strong>${displayName}</strong>,
-                  </p>
+        <p style="
+          margin:0;
+          color:#666666;
+          font-size:15px;
+          line-height:1.7;
+        ">
+          Please keep this email for your records.
+        </p>
 
-                  <p style="
-                    margin:0 0 26px;
-                    font-size:16px;
-                    line-height:1.8;
-                    color:#4b5563;
-                  ">
-                    We are pleased to inform you that your payment has been successfully verified.
-                    Your Lucky Pass entry is now officially confirmed for the upcoming draw.
-                  </p>
+      </td>
+    </tr>
 
-                  <!-- TICKET BOX -->
-                  <table width="100%" cellpadding="0" cellspacing="0"
-                    style="
-                      background:#fff8db;
-                      border:1px solid #fde68a;
-                      border-radius:14px;
-                      margin:28px 0;
-                    ">
+    <!-- FOOTER -->
+    <tr>
+      <td style="
+        padding:24px 40px 40px;
+        border-top:1px solid #eeeeee;
+      ">
 
-                    <tr>
-                      <td style="padding:24px; text-align:center;">
+        <p style="
+          margin:0 0 8px;
+          font-size:14px;
+          font-weight:600;
+          color:#111111;
+        ">
+          Rotaract Club of University of Ruhuna
+        </p>
 
-                        <p style="
-                          margin:0;
-                          font-size:13px;
-                          letter-spacing:1.5px;
-                          color:#92400e;
-                          text-transform:uppercase;
-                          font-weight:700;
-                        ">
-                          Verified Ticket ID
-                        </p>
+        <p style="
+          margin:0;
+          font-size:13px;
+          line-height:1.7;
+          color:#777777;
+        ">
+          Thank you for supporting our initiative.
+        </p>
 
-                        <p style="
-                          margin:12px 0 0;
-                          font-size:30px;
-                          font-weight:800;
-                          color:#111827;
-                          letter-spacing:1px;
-                        ">
-                          ${escapeHtml(ticketId)}
-                        </p>
+      </td>
+    </tr>
 
-                      </td>
-                    </tr>
-                  </table>
+  </table>
 
-                  <p style="
-                    margin:0 0 20px;
-                    font-size:15px;
-                    line-height:1.8;
-                    color:#6b7280;
-                  ">
-                    Please keep this email for your records. If you have any questions
-                    regarding your entry or payment verification, feel free to contact us.
-                  </p>
+</td>
+</tr>
+</table>
 
-                  <!-- BUTTON -->
-                  <table cellpadding="0" cellspacing="0" style="margin-top:34px;">
-                    <tr>
-                      <td align="center">
-                        <a href="#"
-                          style="
-                            background:#111827;
-                            color:#ffffff;
-                            text-decoration:none;
-                            padding:14px 28px;
-                            border-radius:10px;
-                            font-size:15px;
-                            font-weight:600;
-                            display:inline-block;
-                          ">
-                          Lucky Pass Confirmed
-                        </a>
-                      </td>
-                    </tr>
-                  </table>
-
-                </td>
-              </tr>
-
-              <!-- FOOTER -->
-              <tr>
-                <td style="
-                  background:#f9fafb;
-                  padding:28px 34px;
-                  text-align:center;
-                  border-top:1px solid #e5e7eb;
-                ">
-
-                  <p style="
-                    margin:0;
-                    font-size:15px;
-                    color:#111827;
-                    font-weight:700;
-                  ">
-                    Rotaract Club of University of Ruhuna
-                  </p>
-
-                  <p style="
-                    margin:10px 0 0;
-                    font-size:13px;
-                    color:#6b7280;
-                    line-height:1.6;
-                  ">
-                    Thank you for supporting our initiative.
-                  </p>
-
-                </td>
-              </tr>
-
-            </table>
-
-          </td>
-        </tr>
-      </table>
-
-    </body>
-  </html>
-  `;
+</body>
+</html>
+`;
 }
 
 function escapeHtml(value: string) {
