@@ -151,6 +151,9 @@ ticket emails supported using:
 
 - Gmail SMTP
 - Gmail App Password authentication
+- Gmail-only buyer addresses
+
+No Gmail API key is required for this setup. Use `GMAIL_USER` and `GMAIL_APP_PASSWORD`.
 
 ---
 

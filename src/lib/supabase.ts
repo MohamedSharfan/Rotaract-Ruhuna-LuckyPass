@@ -200,18 +200,6 @@ export async function verifyReservedTicket(ticket: Ticket) {
   const token = await getRequiredAccessToken();
   await runAdminAction("verify", token, { ticketId: ticket.id });
   notifyTicketChange();
-
-  if (ticket.email) {
-    await fetch("/api/send-ticket-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: ticket.email,
-        name: ticket.ownerName,
-        ticketId: ticket.id,
-      }),
-    }).catch(() => undefined);
-  }
 }
 
 export async function releaseSoldTicket(ticketId: string) {

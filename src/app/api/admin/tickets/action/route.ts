@@ -3,6 +3,7 @@ import {
   getSupabaseAdmin,
   requireAdminUser,
 } from "@/lib/supabase-admin";
+import { sendLuckyPassVerificationEmail } from "@/lib/gmail-email";
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
       }
 
       const now = new Date().toISOString();
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("tickets")
         .update({
           status: "sold",
@@ -29,10 +30,52 @@ export async function POST(request: Request) {
           verified_at: now,
           purchased_at: now,
         })
-        .eq("id", ticketId);
+        .eq("id", ticketId)
+        .eq("status", "reserved")
+        .eq("payment_status", "pending")
+        .select("id, email, owner_name")
+        .maybeSingle();
 
       if (error) throw new Error(error.message);
-      return NextResponse.json({ ok: true });
+
+      if (!data) {
+        return NextResponse.json(
+          { error: "Ticket not found or already processed." },
+          { status: 404 },
+        );
+      }
+
+      const ticket = data as {
+        id: string;
+        email: string | null;
+        owner_name: string | null;
+      };
+
+      const emailResult = ticket.email
+        ? await sendLuckyPassVerificationEmail({
+            to: ticket.email,
+            name: ticket.owner_name,
+            ticketId: ticket.id,
+          }).catch((mailError) => ({
+            sent: false as const,
+            skipped: false as const,
+            reason:
+              mailError instanceof Error
+                ? mailError.message
+                : "Could not send verification email.",
+          }))
+        : {
+            sent: false as const,
+            skipped: true as const,
+            reason: "No email address was stored for this ticket.",
+          };
+
+      return NextResponse.json({
+        ok: true,
+        emailSent: emailResult.sent,
+        emailSkipped: "skipped" in emailResult ? emailResult.skipped : false,
+        emailReason: "reason" in emailResult ? emailResult.reason : undefined,
+      });
     }
 
     if (action === "reject") {

@@ -6,6 +6,7 @@ import {
   getSupabaseAdmin,
   toTicket,
 } from "@/lib/supabase-admin";
+import { isGmailAddress } from "@/lib/gmail-email";
 import { formatTicketId, TICKET_COUNT, type Ticket } from "@/lib/tickets";
 
 const MAX_SLIP_BYTES = 2 * 1024 * 1024;
@@ -31,6 +32,14 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         { error: "Missing buyer details or payment slip." },
+        { status: 400 },
+      );
+    }
+
+    const email = customer.email?.trim().toLowerCase();
+    if (!email || !isGmailAddress(email)) {
+      return NextResponse.json(
+        { error: "Please use a Gmail address for ticket confirmation." },
         { status: 400 },
       );
     }
@@ -102,7 +111,7 @@ export async function POST(request: Request) {
       payment_status: "pending",
       owner_name: customer.name,
       phone: customer.phone,
-      email: customer.email?.trim() || null,
+      email,
       payment_slip_name: customer.paymentSlipName,
       payment_slip_url: slipUrl,
       payment_slip_path: path,

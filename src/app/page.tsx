@@ -479,12 +479,17 @@ function TicketReveal({
           <input
             required
             type="email"
+            pattern="^[^\s@]+@gmail\.com$"
+            title="Use a Gmail address"
+            inputMode="email"
+            autoComplete="email"
             placeholder="Email address"
             value={customer.email}
             onChange={(event) =>
               setCustomer({ ...customer, email: event.target.value })
             }
           />
+          <p className="admin-muted">Use your Gmail address. The approval email will be sent there.</p>
           <ArcadeButton
             type="submit"
             label={busy || loading ? "RESERVING..." : "RESERVE SELECTED PASS"}
