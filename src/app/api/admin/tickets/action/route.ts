@@ -5,6 +5,8 @@ import {
 } from "@/lib/supabase-admin";
 import { sendLuckyPassVerificationEmail } from "@/lib/gmail-email";
 
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
   try {
     await requireAdminUser(request);
