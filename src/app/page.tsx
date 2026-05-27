@@ -559,15 +559,15 @@ function TicketReveal({
                   <dl>
                     <div>
                       <dt>Account Name</dt>
-                      <dd>A.M. Mary Oshini</dd>
+                      <dd>W.A.N.K.ATHTHANAYAKA</dd>
                     </div>
                     <div>
                       <dt>Bank</dt>
-                      <dd>People's Bank - Kalutara</dd>
+                      <dd>Peoples Bank - Horana</dd>
                     </div>
                     <div>
                       <dt>Account No.</dt>
-                      <dd>039200130027668</dd>
+                      <dd>041200130105409</dd>
                     </div>
                     <div>
                       <dt>Amount</dt>
