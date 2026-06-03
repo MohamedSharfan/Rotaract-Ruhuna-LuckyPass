@@ -67,7 +67,7 @@ export async function POST(request: Request) {
 
     if (ticketId && !normalizedTicketId) {
       return NextResponse.json(
-        { error: "Choose an LP number from LP1 to LP600." },
+        { error: "Choose an LP number from LP1 to LP1000." },
         { status: 400 },
       );
     }

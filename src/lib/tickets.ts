@@ -18,8 +18,8 @@ export type Ticket = {
   purchasedAt?: string;
 };
 
-export const TICKET_COUNT = 600;
-export const TICKET_PRICE = 200;
+export const TICKET_COUNT = 1000;
+export const TICKET_PRICE = 100;
 
 export function formatTicketId(number: number) {
   return `LP${String(number).padStart(3, "0")}`;

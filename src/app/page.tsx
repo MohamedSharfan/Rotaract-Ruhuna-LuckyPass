@@ -89,7 +89,7 @@ export default function Home() {
     );
     if (!requestedTicketId) {
       throw new Error(
-        "Choose an LP number from LP1 to LP600, or tap one on the board.",
+        "Choose an LP number from LP1 to LP1000, or tap one on the board.",
       );
     }
     const purchased = await reserve(customer, requestedTicketId);
@@ -160,9 +160,9 @@ export default function Home() {
         <div className="treasure-grid">
           {[
             [
-              "600",
+              "1000",
               "Limited LP Tickets",
-              "Every collectible pass is minted from LP001 to LP600.",
+              "Every collectible pass is minted from LP001 to LP1000.",
             ],
             [
               "Gold",
@@ -367,7 +367,9 @@ function TicketReveal({
 
     const desiredTicketId = normalizeTicketId(selectedTicketId);
     if (!desiredTicketId) {
-      setError("Choose an LP number from LP1 to LP600, or tap one on the board.");
+      setError(
+        "Choose an LP number from LP1 to LP1000, or tap one on the board.",
+      );
       return;
     }
 
@@ -443,7 +445,7 @@ function TicketReveal({
               onChange={(event) =>
                 onSelectedTicketIdChange(sanitizeTicketInput(event.target.value))
               }
-              placeholder="LP1 - LP600"
+              placeholder="LP1 - LP1000"
               maxLength={6}
               inputMode="text"
               autoComplete="off"
@@ -456,7 +458,7 @@ function TicketReveal({
                   ? `${selectedTicket.id} is available. Reserve it now.`
                   : `${selectedTicket.id} is already ${selectedTicket.status}. Pick another number.`
                 : selectedTicketId
-                  ? "Enter an LP number from LP1 to LP600, or tap one on the board below."
+                  ? "Enter an LP number from LP1 to LP1000, or tap one on the board below."
                   : "Type a ticket number or tap one on the board below."}
             </p>
           </div>
@@ -715,7 +717,7 @@ function TicketBoard({
       <SectionTitle
         icon={<TicketIcon size={20} />}
         kicker="ticket vault"
-        title="A chunky arcade board for all 600 collectible passes."
+        title="A chunky arcade board for all 1000 collectible passes."
       />
       <div className="board-machine">
         <div className="board-toolbar">

@@ -18,7 +18,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Lucky Pass | Rotaract Club of University of Ruhuna",
   description:
-    "A cinematic raffle draw experience with 600 Lucky Pass tickets.",
+    "A cinematic raffle draw experience with 1000 Lucky Pass tickets.",
   icons: {
     icon: rotaractLogo.src,
   },
